@@ -1,3 +1,5 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Platform, StyleSheet, View } from 'react-native';
@@ -10,6 +12,12 @@ import { Colors } from '@/constants/colors';
 const WEB_MAX_WIDTH = 480;
 
 export default function RootLayout() {
+  // Web (server output): the server renders icons, but in the browser an icon renders empty
+  // until its font is on the page, so hydration fails. Loading the font here makes the server
+  // put its @font-face rule in the HTML, so the browser sees it as loaded on the first render.
+  // Don't wait for `loaded` before rendering: that would itself differ between server and browser.
+  useFonts(Ionicons.font);
+
   const stack = <Stack screenOptions={{ headerShown: false }} />;
 
   return (
